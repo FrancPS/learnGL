@@ -3,20 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\learnGL.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|solutionrelative:src\\learnGL.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\Render.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|solutionrelative:src\\Render.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\Render.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|solutionrelative:src\\Render.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\learnGL.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C85B59A3-46E7-4800-B340-1BBC190DD4B0}|learnGL.vcxproj|solutionrelative:src\\learnGL.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,45 +27,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": ".gitignore",
-              "DocumentMoniker": "C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\.gitignore",
-              "RelativeDocumentMoniker": ".gitignore",
-              "ToolTip": "C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\.gitignore",
-              "RelativeToolTip": ".gitignore",
-              "ViewState": "AgIAAIwBAAAAAAAAAAAAAKMBAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-06-16T17:41:23.307Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "Render.cpp",
               "DocumentMoniker": "C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\Render.cpp",
               "RelativeDocumentMoniker": "src\\Render.cpp",
               "ToolTip": "C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\Render.cpp",
               "RelativeToolTip": "src\\Render.cpp",
-              "ViewState": "AgIAAIoAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAKYAAAAAAAAAAAAUwLYAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-06-16T17:18:48.823Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Render.h",
               "DocumentMoniker": "C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\Render.h",
               "RelativeDocumentMoniker": "src\\Render.h",
               "ToolTip": "C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\Render.h",
               "RelativeToolTip": "src\\Render.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACAAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-06-16T17:17:49.96Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "learnGL.cpp",
               "DocumentMoniker": "C:\\Users\\franc\\Desktop\\CPPprojects\\learnGL\\src\\learnGL.cpp",
               "RelativeDocumentMoniker": "src\\learnGL.cpp",
