@@ -1,7 +1,7 @@
 #include "Render.h"
 
+#include <stdlib.h>
 #include <iostream>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -22,8 +22,8 @@ Render::Render()
     window = initGL();
     if (!window)
     {
-        std::cout << "Failed to initialize GL" << std::endl;
-        // TODO Manage bad initialisation
+        std::cerr << "Failed to initialize GL" << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 }
 
@@ -33,47 +33,15 @@ Render::~Render()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShaderOrange);
     glDeleteShader(fragmentShaderYellow);
-    glDeleteVertexArrays(1, VAOs);
+    glDeleteShader(fragmentShaderVariableGreen);
+    glDeleteVertexArrays(2, VAOs);
     glDeleteBuffers(1, &EBO);
-    glDeleteBuffers(1, VBOs);
+    glDeleteBuffers(2, VBOs);
     glDeleteProgram(shaderProgramOrange);
     glDeleteProgram(shaderProgramYellow);
+    glDeleteProgram(shaderProgramVariableGreen);
 
     glfwTerminate();
-}
-
-void Render::processInput()
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
-GLFWwindow* Render::initGL()
-{
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return nullptr;
-    }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return nullptr;
-    }
-
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-
-    return window;
 }
 
 void Render::initBuffers()
@@ -134,71 +102,16 @@ void Render::initBuffers()
 void Render::initShaders()
 {
     // VERTEX SHADER
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    int  success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
+    vertexShader = CreateShader(ShaderType::VERTEX, vertexShaderSource);
 
     // FRAGMENT SHADER
-    fragmentShaderOrange = glCreateShader(GL_FRAGMENT_SHADER);
-
-    glShaderSource(fragmentShaderOrange, 1, &fragmentShaderSourceOrange, NULL);
-    glCompileShader(fragmentShaderOrange);
-
-    glGetShaderiv(fragmentShaderOrange, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShaderOrange, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    //--
-    fragmentShaderYellow = glCreateShader(GL_FRAGMENT_SHADER);
-
-    glShaderSource(fragmentShaderYellow, 1, &fragmentShaderSourceYellow, NULL);
-    glCompileShader(fragmentShaderYellow);
-
-    glGetShaderiv(fragmentShaderYellow, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShaderYellow, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
+    fragmentShaderOrange = CreateShader(ShaderType::FRAGMENT, fragmentShaderSourceOrange);
+    fragmentShaderYellow = CreateShader(ShaderType::FRAGMENT, fragmentShaderSourceYellow);
+    fragmentShaderVariableGreen = CreateShader(ShaderType::FRAGMENT, fragmentShaderSourceVariableGreen);
 
     // SHADER PROGRAM
-    shaderProgramOrange = glCreateProgram();
-
-    glAttachShader(shaderProgramOrange, vertexShader);
-    glAttachShader(shaderProgramOrange, fragmentShaderOrange);
-    glLinkProgram(shaderProgramOrange);
-
-    glGetProgramiv(shaderProgramOrange, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        glGetProgramInfoLog(shaderProgramOrange, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER_PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    //--
-    shaderProgramYellow = glCreateProgram();
-
-    glAttachShader(shaderProgramYellow, vertexShader);
-    glAttachShader(shaderProgramYellow, fragmentShaderYellow);
-    glLinkProgram(shaderProgramYellow);
-
-    glGetProgramiv(shaderProgramYellow, GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        glGetProgramInfoLog(shaderProgramYellow, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER_PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
+    shaderProgramOrange = CreateProgram(vertexShader, fragmentShaderOrange);
+    shaderProgramYellow = CreateProgram(vertexShader, fragmentShaderYellow);
 }
 
 void Render::Update()
@@ -228,4 +141,78 @@ void Render::Update()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+}
+
+unsigned int Render::CreateShader(ShaderType shaderType, const char* source)
+{
+    unsigned int shader = glCreateShader(shaderType);
+
+    glShaderSource(shader, 1, &source, NULL);
+    glCompileShader(shader);
+
+    int  success;
+    char infoLog[512];
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        glGetShaderInfoLog(shader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+        return -1;
+    }
+    return shader;
+}
+
+unsigned int Render::CreateProgram(unsigned int vertexShader, unsigned int fragmentShader)
+{
+    unsigned int program = glCreateProgram();
+
+    glAttachShader(program, vertexShader);
+    glAttachShader(program, fragmentShader);
+    glLinkProgram(program);
+
+    int  success;
+    char infoLog[512];
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        glGetProgramInfoLog(program, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER_PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        return -1;
+    }
+
+    return program;
+}
+
+void Render::processInput()
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+GLFWwindow* Render::initGL()
+{
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return nullptr;
+    }
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return nullptr;
+    }
+
+    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+
+    return window;
 }
