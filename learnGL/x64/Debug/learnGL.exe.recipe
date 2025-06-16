@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\franc\Desktop\CPPprojects\learnGL\x64\Debug\learnGL.exe</FullPath>
+      <FullPath>C:\Users\franc\Desktop\CPPprojects\learnGL\Build\x64\Debug\learnGL.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
