@@ -9,14 +9,11 @@
 
 #include "ImgLoader.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // TODO Add this function as a class member?
     glViewport(0, 0, width, height);
 }
-
-
 
 // -- RENDER
 constexpr unsigned int SCR_WIDTH = 800;
@@ -24,7 +21,7 @@ constexpr unsigned int SCR_HEIGHT = 600;
 
 Render::Render()
 {
-    window = initGL();
+    window = InitGL();
     if (!window)
     {
         std::cerr << "Failed to initialize GL" << std::endl;
@@ -43,7 +40,7 @@ Render::~Render()
     glfwTerminate();
 }
 
-void Render::initBuffers()
+void Render::InitBuffers()
 {
     float vertices[] = {
         // positions          // colors           // texture coords
@@ -84,13 +81,9 @@ void Render::initBuffers()
 
     // End calls
     glBindVertexArray(0);
-    
-
-    // Wireframe mode
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-void Render::initShaders()
+void Render::InitShaders()
 {
     shader1 = new Shader("./src/shaders/shaderTexture.vs", "./src/shaders/shaderTexture.fs");
     texture1 = LoadImg("textures/container.jpg", GL_RGB);
@@ -102,7 +95,7 @@ void Render::Update()
     while (!glfwWindowShouldClose(window))
     {
         // input
-        processInput();
+        ProcessInput();
 
         // rendering commands here
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -127,13 +120,27 @@ void Render::Update()
     }
 }
 
-void Render::processInput()
+void Render::ProcessInput()
 {
+    static bool wKeyWasPressed = false;
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        if (!wKeyWasPressed)
+        {
+            ToggleWireframeMode();
+            wKeyWasPressed = true;
+        }
+    }
+    else
+    {
+        wKeyWasPressed = false;
+    }
 }
 
-GLFWwindow* Render::initGL()
+GLFWwindow* Render::InitGL()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -159,4 +166,20 @@ GLFWwindow* Render::initGL()
     glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
     return window;
+}
+
+void Render::ToggleWireframeMode()
+{
+    static bool enabled = false;
+
+    if (enabled)
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+    else
+    {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
+    enabled = !enabled;
 }

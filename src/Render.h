@@ -3,22 +3,25 @@
 struct GLFWwindow;
 class Shader;
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
 class Render
 {
 public:
     Render();
     ~Render();
     
-    void initBuffers();
-    void initShaders();
+    void InitBuffers();
+    void InitShaders();
 
     void Update();
     
 
 private:
-    void processInput();
-    GLFWwindow* initGL();
-
+    void ProcessInput();
+    GLFWwindow* InitGL();
+    void ToggleWireframeMode();
+    
     GLFWwindow* window {nullptr};
 
     // data
