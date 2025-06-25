@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glad/glad.h>
-
 struct GLFWwindow;
 class Shader;
 
@@ -29,5 +27,8 @@ private:
     unsigned int VBOs[2];
 
     Shader* shader1 {nullptr};
+
+    unsigned int texture1;
+    unsigned int texture2;
 };
 

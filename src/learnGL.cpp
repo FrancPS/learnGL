@@ -1,8 +1,4 @@
-#include <iostream>
-
 #include "Render.h"
-
-
 
 int main()
 {
@@ -10,6 +6,8 @@ int main()
 
     render->initBuffers();
     render->initShaders();
+    
+    //LoadImg();
 
     render->Update();
 
