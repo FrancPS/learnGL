@@ -8,7 +8,7 @@
 #include <GLFW/glfw3.h>
 
 
-unsigned int LoadImg(std::string name, int colorMode)
+unsigned int LoadImg(const std::string& name, int colorMode)
 {
     unsigned int texture;
     glGenTextures(1, &texture);
