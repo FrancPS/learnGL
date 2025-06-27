@@ -14,16 +14,15 @@ public:
     
     void Start();
     void Update();
-    
-    bool returnSignal {false};
+
+    GLFWwindow* GetWindow() { return window; }
 
 private:
-    void ProcessInput();
     GLFWwindow* InitGL();
     void InitBuffers();
     void InitTransformMatrices();
     void InitShaders();
-    void ToggleWireframeMode();
+    //void ToggleWireframeMode(); // TODO: Move function back here
     
     GLFWwindow* window {nullptr};
 

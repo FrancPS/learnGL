@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\InputModule.cpp" />
     <ClCompile Include="src\ImgLoader.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Render.cpp" />
@@ -156,6 +157,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\InputModule.h" />
     <ClInclude Include="src\ImgLoader.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Render.h" />

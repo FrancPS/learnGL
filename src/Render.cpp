@@ -158,15 +158,6 @@ void Render::Start()
 
 void Render::Update()
 {
-    if (glfwWindowShouldClose(window))
-    {
-        returnSignal = true;
-        return;
-    }
-    
-    // input
-    ProcessInput();
-
     // rendering commands here
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -194,28 +185,6 @@ void Render::Update()
     // check and call events and swap the buffers
     glfwSwapBuffers(window);
     glfwPollEvents();
-}
-
-
-// TODO: make an input class
-void Render::ProcessInput()
-{
-    static bool wKeyWasPressed = false;
-
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        if (!wKeyWasPressed)
-        {
-            ToggleWireframeMode();
-            wKeyWasPressed = true;
-        }
-    }
-    else
-    {
-        wKeyWasPressed = false;
-    }
 }
 
 GLFWwindow* Render::InitGL()
@@ -246,18 +215,3 @@ GLFWwindow* Render::InitGL()
     return window;
 }
 
-void Render::ToggleWireframeMode()
-{
-    static bool enabled = false;
-
-    if (enabled)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
-    else
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
-
-    enabled = !enabled;
-}
