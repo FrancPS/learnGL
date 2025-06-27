@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/gtc/matrix_transform.hpp>
 
 struct GLFWwindow;
 class Shader;
@@ -11,15 +12,17 @@ public:
     Render();
     ~Render();
     
-    void InitBuffers();
-    void InitShaders();
-
+    void Start();
     void Update();
     
+    bool returnSignal {false};
 
 private:
     void ProcessInput();
     GLFWwindow* InitGL();
+    void InitBuffers();
+    void InitTransform();
+    void InitShaders();
     void ToggleWireframeMode();
     
     GLFWwindow* window {nullptr};
@@ -33,5 +36,6 @@ private:
 
     unsigned int texture1;
     unsigned int texture2;
+    glm::mat4 transformMatx;
 };
 

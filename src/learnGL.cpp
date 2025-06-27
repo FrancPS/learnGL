@@ -4,12 +4,12 @@ int main()
 {
     Render* render = new Render();
 
-    render->InitBuffers();
-    render->InitShaders();
-    
-    //LoadImg();
+    render->Start();
 
-    render->Update();
+    while (!render->returnSignal)
+    {
+        render->Update();
+    }
     
     delete render;
     return 0;

@@ -2,11 +2,14 @@
 
 #include <stdlib.h>
 #include <iostream>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Shader.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+#include "Shader.h"
 #include "ImgLoader.h"
 
 
@@ -38,6 +41,13 @@ Render::~Render()
     glDeleteBuffers(2, VBOs);
 
     glfwTerminate();
+}
+
+void Render::InitTransform()
+{
+    glm::mat4 trans = glm::mat4(1.0f);
+    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+    transformMatx = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 }
 
 void Render::InitBuffers()
@@ -85,41 +95,61 @@ void Render::InitBuffers()
 
 void Render::InitShaders()
 {
-    shader1 = new Shader("./src/shaders/shaderTexture.vs", "./src/shaders/shaderTexture.fs");
+    shader1 = new Shader("./src/shaders/shaderTransform.vs", "./src/shaders/shaderTransform.fs");
     texture1 = LoadImg("textures/container.jpg", GL_RGB);
     texture2 = LoadImg("textures/awesomeface.png", GL_RGBA);
+
+    shader1->Use();
+    shader1->SetInt("texture1", 0);
+    shader1->SetInt("texture2", 1);
+}
+
+void Render::Start()
+{
+    InitBuffers();
+    InitTransform();
+    InitShaders();
 }
 
 void Render::Update()
 {
-    while (!glfwWindowShouldClose(window))
+    if (glfwWindowShouldClose(window))
     {
-        // input
-        ProcessInput();
-
-        // rendering commands here
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
-        shader1->Use();
-        shader1->SetInt("texture1", 0);
-        shader1->SetInt("texture2", 1);
-        
-        glBindVertexArray(VAOs[0]);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        
-        glBindVertexArray(0);
-
-        // check and call events and swap the buffers
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        returnSignal = true;
+        return;
     }
+    
+    // input
+    ProcessInput();
+
+    //transformations
+    transformMatx = glm::rotate(transformMatx, (float)glfwGetTime() / 100, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    // rendering commands here
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+
+    shader1->Use();
+    unsigned int transformLoc = glGetUniformLocation(shader1->ID, "transform");
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformMatx));
+
+    glBindVertexArray(VAOs[0]);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    glBindVertexArray(0);
+
+    // check and call events and swap the buffers
+    glfwSwapBuffers(window);
+    glfwPollEvents();
 }
 
+
+// TODO: make an input class
 void Render::ProcessInput()
 {
     static bool wKeyWasPressed = false;
