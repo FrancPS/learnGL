@@ -3,8 +3,11 @@
 
 struct GLFWwindow;
 class Shader;
+class Camera;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 class Render
 {
@@ -22,7 +25,7 @@ private:
     void InitBuffers();
     void InitTransformMatrices();
     void InitShaders();
-    //void ToggleWireframeMode(); // TODO: Move function back here
+    void ToggleWireframeMode();
     
     GLFWwindow* window {nullptr};
 
@@ -36,9 +39,9 @@ private:
     unsigned int texture1;
     unsigned int texture2;
 
+    Camera* camera {nullptr};
+
     glm::mat4 modelMtx;
-    glm::mat4 viewMtx;
-    glm::mat4 projMtx;
 
     glm::vec3 cubePositions[10] = {
         glm::vec3(0.0f,  0.0f,  0.0f),

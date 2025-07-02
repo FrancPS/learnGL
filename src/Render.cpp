@@ -1,5 +1,10 @@
 #include "Render.h"
 
+#include "InputModule.h"
+#include "Shader.h"
+#include "ImgLoader.h"
+#include "Camera.h"
+
 #include <stdlib.h>
 #include <iostream>
 
@@ -9,19 +14,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Shader.h"
-#include "ImgLoader.h"
 
+constexpr unsigned int SCR_WIDTH = 800;
+constexpr unsigned int SCR_HEIGHT = 600;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
-// -- RENDER
-constexpr unsigned int SCR_WIDTH = 800;
-constexpr unsigned int SCR_HEIGHT = 600;
-
+// -- RENDER --
 Render::Render()
 {
     window = InitGL();
@@ -30,6 +32,11 @@ Render::Render()
         std::cerr << "Failed to initialize GL" << std::endl;
         std::exit(EXIT_FAILURE);
     }
+
+    InputModule::GetInstance()->OnKeyPress.Register([&](int keyCode) { if (keyCode == GLFW_KEY_X) ToggleWireframeMode(); });
+
+    camera = new Camera(SCR_WIDTH, SCR_HEIGHT);
+    camera->Start(window);
 }
 
 Render::~Render()
@@ -50,11 +57,6 @@ void Render::InitTransformMatrices()
 {
     modelMtx = glm::mat4(1.0f);
     modelMtx = glm::rotate(modelMtx, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-    viewMtx = glm::mat4(1.0f);
-    viewMtx = glm::translate(viewMtx, glm::vec3(0.0f, 0.0f, -3.0f));
-
-    projMtx = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 }
 
 void Render::InitBuffers()
@@ -145,8 +147,6 @@ void Render::InitShaders()
     shader1->Use();
     shader1->SetInt("texture1", 0);
     shader1->SetInt("texture2", 1);
-    shader1->SetMat4("view", viewMtx);
-    shader1->SetMat4("proj", projMtx);
 }
 
 void Render::Start()
@@ -158,6 +158,10 @@ void Render::Start()
 
 void Render::Update()
 {
+    camera->Update();
+    shader1->SetMat4("view", camera->GetViewMatrix());
+    shader1->SetMat4("proj", camera->GetProjMatrix());
+
     // rendering commands here
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -213,5 +217,16 @@ GLFWwindow* Render::InitGL()
     glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
     return window;
+}
+
+void Render::ToggleWireframeMode()
+{
+    static bool enabled = false;
+    enabled = !enabled;
+
+    if (enabled)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 

@@ -3,56 +3,64 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-//TODO: Start without a function
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    InputModule::GetInstance()->OnCursorMove.Trigger((float)xpos, (float)ypos);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    InputModule::GetInstance()->OnMouseScroll.Trigger((float)xoffset, (float)yoffset);
+}
+
+InputModule* InputModule::GetInstance()
+{
+    if (!Input)
+        Input = new InputModule();
+    return Input;
+}
+
+//TODO: Start without a parameter
 void InputModule::Start(GLFWwindow* _window)
 {
     window = _window;
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
 }
 
 void InputModule::Update()
 {
     ProcessInput();
-
-    if (glfwWindowShouldClose(window))
-    {
-        returnSignal = true;
-        return;
-    }
 }
 
 void InputModule::ProcessInput()
 {
-    static bool wKeyWasPressed = false;
+    
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        InputModule::GetInstance()->OnKeyPress.Trigger(GLFW_KEY_A);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        InputModule::GetInstance()->OnKeyPress.Trigger(GLFW_KEY_S);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        InputModule::GetInstance()->OnKeyPress.Trigger(GLFW_KEY_D);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        InputModule::GetInstance()->OnKeyPress.Trigger(GLFW_KEY_W);
+
+    static bool XKeyWasPressed = false; // Hack to avoid call a Trigger on every frame
+    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
     {
-        if (!wKeyWasPressed)
+        if (!XKeyWasPressed)
         {
-            //TODO: Render->ToggleWireframeMode();
-            ToggleWireframeMode();
-            wKeyWasPressed = true;
+            InputModule::GetInstance()->OnKeyPress.Trigger(GLFW_KEY_X);
+            XKeyWasPressed = true;
         }
     }
     else
     {
-        wKeyWasPressed = false;
+        XKeyWasPressed = false;
     }
-}
-
-void InputModule::ToggleWireframeMode()
-{
-    static bool enabled = false;
-
-    if (enabled)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
-    else
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
-
-    enabled = !enabled;
 }

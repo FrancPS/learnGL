@@ -122,6 +122,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\franc\Desktop\CPPprojects\learnGL\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,6 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\InputModule.cpp" />
     <ClCompile Include="src\ImgLoader.cpp" />
     <ClCompile Include="src\Shader.cpp" />
@@ -155,12 +158,16 @@
     <ClCompile Include="src\learnGL.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\franc\Desktop\CPPprojects\learnGL\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="src\Time\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Events\Event.h" />
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\InputModule.h" />
     <ClInclude Include="src\ImgLoader.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Render.h" />
+    <ClInclude Include="src\Time\Time.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

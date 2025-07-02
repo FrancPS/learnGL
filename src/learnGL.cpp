@@ -1,16 +1,21 @@
-#include "Render.h"
 #include "InputModule.h"
+#include "Render.h"
+#include "Time/Time.h"
+
+#include <GLFW/glfw3.h>
 
 int main()
 {
     Render* render = new Render();
-    InputModule* input = new InputModule();
+    InputModule* input = InputModule::GetInstance();
 
     render->Start();
     input->Start(render->GetWindow());
 
-    while (!input->returnSignal)
+    while (!glfwWindowShouldClose(render->GetWindow()))
     {
+        Time::Update();
+
         input->Update();
         render->Update();
     }
