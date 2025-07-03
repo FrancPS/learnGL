@@ -189,13 +189,27 @@ void Render::Update()
     
     //Main Object
     shaders[0]->Use();
-    shaders[0]->SetMat4("view", camera->GetViewMatrix());
-    shaders[0]->SetMat4("proj", camera->GetProjMatrix());
-    shaders[0]->SetVec3("lightPos", lightPos);
-    shaders[0]->SetVec3("viewPos", camera->GetPosition());
+
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.3f, 0.5f));
     shaders[0]->SetMat4("model", model);
+    shaders[0]->SetMat4("view", camera->GetViewMatrix());
+    shaders[0]->SetMat4("proj", camera->GetProjMatrix());
+    shaders[0]->SetVec3("viewPos", camera->GetPosition());
+
+    shaders[0]->SetVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+    shaders[0]->SetVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+    shaders[0]->SetVec3("material.specular", 0.5f, 0.5f, 0.5f);
+    shaders[0]->SetFloat("material.shininess", 32.0f);
+
+    glm::vec3 lightColor {sin(glfwGetTime() * 2.0f), sin(glfwGetTime() * 0.7f), sin(glfwGetTime() * 1.3f)};
+    glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+    shaders[0]->SetVec3("light.position", lightPos);
+    shaders[0]->SetVec3("light.ambient", ambientColor);
+    shaders[0]->SetVec3("light.diffuse", diffuseColor);
+    shaders[0]->SetVec3("light.specular", 1.0f, 1.0f, 1.0f);
+    
     glBindVertexArray(VAOs[0]);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 
